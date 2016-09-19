@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		694B9EFC1D8CEADC0073723A /* TableViewCell1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694B9EFA1D8CEADC0073723A /* TableViewCell1.swift */; };
+		694B9EFD1D8CEADC0073723A /* TableViewCell1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 694B9EFB1D8CEADC0073723A /* TableViewCell1.xib */; };
 		698DF16D1D862CA6004F456E /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 698DF16C1D862CA6004F456E /* libsqlite3.0.tbd */; };
 		698DF17B1D862E7B004F456E /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 698DF1711D862E7B004F456E /* FMDatabase.m */; };
 		698DF17C1D862E7B004F456E /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 698DF1731D862E7B004F456E /* FMResultSet.m */; };
@@ -46,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		694B9EFA1D8CEADC0073723A /* TableViewCell1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell1.swift; sourceTree = "<group>"; };
+		694B9EFB1D8CEADC0073723A /* TableViewCell1.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell1.xib; sourceTree = "<group>"; };
 		698DF16C1D862CA6004F456E /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		698DF16E1D862E7A004F456E /* MyToDOList-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyToDOList-Bridging-Header.h"; sourceTree = "<group>"; };
 		698DF16F1D862E7B004F456E /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDB.h; path = fmdb/src/fmdb/FMDB.h; sourceTree = "<group>"; };
@@ -150,6 +154,8 @@
 				698E9DC71D7B638500EFBC8B /* FirstViewController.swift */,
 				698E9DC91D7B638500EFBC8B /* SecondViewController.swift */,
 				698E9DF71D7B645000EFBC8B /* TaskManager.swift */,
+				694B9EFA1D8CEADC0073723A /* TableViewCell1.swift */,
+				694B9EFB1D8CEADC0073723A /* TableViewCell1.xib */,
 				698DF1891D86D62A004F456E /* 2SwiftData.swift */,
 				698E9DCB1D7B638500EFBC8B /* Main.storyboard */,
 				698E9DCE1D7B638500EFBC8B /* Assets.xcassets */,
@@ -286,6 +292,7 @@
 				698E9DCF1D7B638500EFBC8B /* Assets.xcassets in Resources */,
 				698DF1881D868AAD004F456E /* Tasks.db in Resources */,
 				698E9DCD1D7B638500EFBC8B /* Main.storyboard in Resources */,
+				694B9EFD1D8CEADC0073723A /* TableViewCell1.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +325,7 @@
 				698E9DF81D7B645000EFBC8B /* TaskManager.swift in Sources */,
 				698DF17B1D862E7B004F456E /* FMDatabase.m in Sources */,
 				698E9DC81D7B638500EFBC8B /* FirstViewController.swift in Sources */,
+				694B9EFC1D8CEADC0073723A /* TableViewCell1.swift in Sources */,
 				698DF18A1D86D62A004F456E /* 2SwiftData.swift in Sources */,
 				698DF17E1D862E7B004F456E /* FMDatabaseAdditions.m in Sources */,
 			);

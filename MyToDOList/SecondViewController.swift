@@ -7,16 +7,21 @@
 //
 
 import UIKit
+import CloudKit
 
-class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDelegate {
+class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet var txtTask: UITextField!
     @IBOutlet var txtDesc: UITextField!
     @IBOutlet weak var secondViewControllerLabel: UILabel!
+    @IBOutlet weak var customPicker: UIPickerView!
     @IBOutlet weak var buttonName: UIButton!
     
     var databasePath = NSString()
-    
+    var pickerArray = ["", "Personal", "Group"]
+    var pickerSelected: Int = 0
+    var pickerValue: String = ""
+     
     //Will determine if a task has been selected in the TableView
     override func viewDidAppear(animated: Bool) {
         
@@ -29,6 +34,8 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
             
             secondViewControllerLabel.text = "Add Task"
             buttonName.setTitle("Add Task", forState: .Normal)
+            customPicker.selectRow(0, inComponent: 0, animated: false)
+            pickerValue = ""
             
         }
         
@@ -37,25 +44,39 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
             secondViewControllerLabel.text = "Edit Task"
             buttonName.setTitle("Update Task", forState: .Normal)
         
-            let oldTask: String = taskMgr.forceTask()
+            let oldName: String = taskMgr.forceTask()
             let oldDesc: String = taskMgr.forceDesc()
+            let oldGroup: String = taskMgr.forceGroup()
             
-            txtTask.text = oldTask
+            txtTask.text = oldName
             txtDesc.text = oldDesc
             
+            if (oldGroup == "Personal") {
+                customPicker.selectRow(1, inComponent: 0, animated: false)
+                pickerValue = "Personal"
+            }
+            
+            else if (oldGroup == "Group") {
+                customPicker.selectRow(2, inComponent: 0, animated: false)
+                pickerValue = "Group"
+            }
+        
         }
 
     }
     
     override func viewDidDisappear(animated: Bool) {
         
-        taskMgr.editTask("", newDesc: "", clicked: 0, selected: 0)
+        taskMgr.editTask("", newDesc: "", newGroup: "", clicked: 0, selected: 0)
                 
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        customPicker.delegate = self
+        customPicker.dataSource = self
         
     }
 
@@ -69,7 +90,7 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
         
         if (secondViewControllerLabel.text == "Edit Task") {
             
-            if ((txtTask.text == "" || txtDesc.text == "") || (txtTask.text == "" && txtDesc.text == "")) {
+            if ((txtTask.text == "" || txtDesc.text == "" || pickerValue == "") || (txtTask.text == "" && txtDesc.text == "" && pickerValue == "")) {
                 
                 self.tabBarController?.selectedIndex = 0
                 
@@ -77,8 +98,12 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
 
             else {
                 
-                let oldName = taskMgr.forceTask()
-                let oldDesc = taskMgr.forceDesc()
+                let oldName = taskMgr.testTitleText(taskMgr.forceTask())
+                let oldDesc = taskMgr.testDescText(taskMgr.forceDesc())
+                let oldGroup = taskMgr.forceGroup()
+                
+                let taskTitleTxt: String = taskMgr.testTitleText(txtTask.text!)
+                let taskDescTxt: String = taskMgr.testDescText(txtDesc.text!)
                 
                 let databaseName = "Tasks.db"
                 let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
@@ -90,8 +115,9 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
                 
                 if taskDB.open() {
                     
-                    let updateSQLname = "UPDATE TASKING SET name = '\(txtTask.text!)' WHERE name = '\(oldName)'"
-                    let updateSQLdesc = "UPDATE TASKING SET desc = '\(txtDesc.text!)' WHERE desc = '\(oldDesc)'"
+                    let updateSQLname = "UPDATE SAVETASK SET name = '\(taskTitleTxt)' WHERE name = '\(oldName)' AND desc = '\(oldDesc)' AND grp = '\(oldGroup)'"
+                    let updateSQLdesc = "UPDATE SAVETASK SET desc = '\(taskDescTxt)' WHERE name = '\(oldName)' AND desc = '\(oldDesc)' AND grp = '\(oldGroup)'"
+                    let updateSQLgroup = "UPDATE SAVETASK SET grp = '\(pickerValue)' WHERE name = '\(oldName)' AND desc = '\(oldDesc)' AND grp = '\(oldGroup)'"
                     
                     if !taskDB.executeUpdate(updateSQLname, withArgumentsInArray: nil) {
                         
@@ -104,33 +130,72 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
                         print("Error: \(taskDB.lastErrorMessage())")
                         
                     }
+                    
+                    if !taskDB.executeUpdate(updateSQLgroup, withArgumentsInArray: nil) {
+                        
+                        print("Error: \(taskDB.lastErrorMessage())")
+                    }
+                    
                     taskDB.close()
-                }
-                else {
+                    
+                }else {
                     print("Error: \(taskDB.lastErrorMessage())")
                 }
 
                 let updateRow2: Int = taskMgr.forceSelect()
+                let oldGroup2: String = taskMgr.forceGroup()
                 
-                taskMgr.updateTask(txtTask.text!, desc: txtDesc.text!, updateRow: updateRow2)
-                self.view.endEditing(true)
-                txtTask.text = ""
-                txtDesc.text = ""
-                self.tabBarController?.selectedIndex = 0
+                if ((oldGroup2 == "Group") && (pickerValue == "Group")) {
+                    
+                    taskMgr.updateTaskGroup(txtTask.text!, desc: txtDesc.text!, group: pickerValue, updateRow: updateRow2)
+                    self.view.endEditing(true)
+                    self.tabBarController?.selectedIndex = 0
+              
+                }
                 
+                if ((oldGroup2 == "Personal") && (pickerValue == "Personal")) {
+                    
+                    taskMgr.updateTaskPersonal(txtTask.text!, desc: txtDesc.text!, group: pickerValue, updateRow: updateRow2)
+                    self.view.endEditing(true)
+                    self.tabBarController?.selectedIndex = 0
+                    
+                }
+                
+                if ((oldGroup2 == "Group") && (pickerValue == "Personal")) {
+                    
+                    taskMgr.updateRemoveGroup(txtTask.text!, desc: txtDesc.text!, group: pickerValue, updateRow: updateRow2)
+                    self.view.endEditing(true)
+                    self.tabBarController?.selectedIndex = 0
+
+                    
+                }
+                
+                if ((oldGroup2 == "Personal") && (pickerValue == "Group")) {
+                    
+                    taskMgr.updateRemovePersonal(txtTask.text!, desc: txtDesc.text!, group: pickerValue, updateRow: updateRow2)
+                    self.view.endEditing(true)
+                    self.tabBarController?.selectedIndex = 0
+
+                }
             }
             
         }
         
         if (secondViewControllerLabel.text == "Add Task") {
             
-            if ((txtTask.text == "" || txtDesc.text == "") || (txtTask.text == "" && txtDesc.text == "")) {
+            if ((txtTask.text == "" || txtDesc.text == "" || pickerValue == "") || (txtTask.text == "" && txtDesc.text == "" && pickerValue == "")) {
                 
                 self.tabBarController?.selectedIndex = 0
             
             }
             
             else {
+                
+                let taskTitleTxt: String = taskMgr.testTitleText(txtTask.text!)
+                let taskDescTxt: String = taskMgr.testDescText(txtDesc.text!)
+                
+                print(taskTitleTxt)
+                print(taskDescTxt)
                 
                 let databaseName = "Tasks.db"
                 let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
@@ -142,7 +207,7 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
                 
                 if taskDB.open() {
                     
-                    let insertSQL = "INSERT INTO TASKING (name, desc) VALUES ('\(txtTask.text!)', '\(txtDesc.text!)')"
+                    let insertSQL = "INSERT INTO SAVETASK (name, desc, grp) VALUES ('\(taskTitleTxt)', '\(taskDescTxt)', '\(pickerValue)')"
                     
                     let result = taskDB.executeUpdate(insertSQL,
                                                          withArgumentsInArray: nil)
@@ -150,17 +215,29 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
                     if !result {
                         print("Error: \(taskDB.lastErrorMessage())")
                     }
+                    
                     taskDB.close()
+                    
                 } else {
                     print("Error: \(taskDB.lastErrorMessage())")
                 } 
                 
-                taskMgr.addTask(txtTask.text!, desc: txtDesc.text!)
-                self.view.endEditing(true)
-                txtTask.text = ""
-                txtDesc.text = ""
-                self.tabBarController?.selectedIndex = 0
-
+                if (pickerSelected == 1) {
+                    
+                    taskMgr.addTaskPersonal(txtTask.text!, desc: txtDesc.text!, group: pickerValue)
+                    self.view.endEditing(true)
+                    self.tabBarController?.selectedIndex = 0
+                    
+                }
+                
+                if (pickerSelected == 2) {
+                    
+                    taskMgr.addTaskGroup(txtTask.text!, desc: txtDesc.text!, group: pickerValue)
+                    self.view.endEditing(true)
+                    self.tabBarController?.selectedIndex = 0
+                    
+                }
+                
             }
             
         }
@@ -180,6 +257,45 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
         return true
     }
 
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return pickerArray[row]
+        
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        return pickerArray.count
+        
+    }
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        
+        return 1
+        
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        pickerSelected = row
+    
+        if (pickerSelected == 1) {
+            pickerValue = "Personal"
+        }
+            
+        else if (pickerSelected == 2) {
+            pickerValue = "Group"
+        }
+        
+        else {
+            pickerValue = ""
+        }
+        
+        print(pickerValue)
+        
+    }
+    
     
 }
 

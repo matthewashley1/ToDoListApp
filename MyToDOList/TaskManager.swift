@@ -3,41 +3,87 @@ import UIKit
 
 var taskMgr: TaskManager = TaskManager()
 
-struct task {
+struct taskGroup {
     var name = "Un-Named"
     var desc = "Un-Described"
+    var group = "Un-Selected"
 }
+
+struct taskPersonal {
+    var name = "Un-Named"
+    var desc = "Un-Described"
+    var group = "Un-Selected"
+}
+
 
 class TaskManager: NSObject {
     
-    var tasks = [task]()
+    var taskGroups = [taskGroup]()
+    var taskPersonals = [taskPersonal]()
     var newTask2: String = ""
     var newDesc2: String = ""
+    var newGroup2: String = ""
     var clicked2: Int = 0
     var selected2: Int = 0
-    
-    //Adds a new task to the TableView
-    func addTask (name: String, desc: String) {
+    var textArray = [String]()
+    var taskTxt: String = ""
+    var x: Int = 0
+    var y: Int = 0
+    var z: Int = 0
+
+    //Adds a new row of values to the taskGroup array
+    func addTaskGroup (name: String, desc: String, group: String) {
         
-        tasks.append(task(name: name, desc: desc))
+        taskGroups.append(taskGroup(name: name, desc: desc, group: group))
+        
+    }
+    
+    //Adds a new row of values to the taskPersonal array
+    func addTaskPersonal (name: String, desc: String, group: String) {
+        
+        taskPersonals.append(taskPersonal(name: name, desc: desc, group: group))
         
     }
     
     //Sets variables to be used in other ViewController files
-    func editTask (newTask: String, newDesc: String, clicked: Int, selected: Int) {
+    func editTask (newTask: String, newDesc: String, newGroup: String, clicked: Int, selected: Int) {
         
         newTask2 = newTask
         newDesc2 = newDesc
+        newGroup2 = newGroup
         clicked2 = clicked
         selected2 = selected
         
     }
     
-    //Updates a existing task
-    func updateTask (name: String, desc: String, updateRow: Int) {
+    //Updates a existing group task
+    func updateTaskGroup (name: String, desc: String, group: String, updateRow: Int) {
         
-        tasks.removeAtIndex(updateRow)
-        tasks.insert(task(name: name, desc: desc), atIndex: updateRow)
+        taskGroups.removeAtIndex(updateRow)
+        taskGroups.insert(taskGroup(name: name, desc: desc, group: group), atIndex: updateRow)
+        
+    }
+    
+    //Updates a existing personal task
+    func updateTaskPersonal (name: String, desc: String, group: String, updateRow: Int) {
+        
+        taskPersonals.removeAtIndex(updateRow)
+        taskPersonals.insert(taskPersonal(name: name, desc: desc, group: group), atIndex: updateRow)
+        
+    }
+    
+    //Removes a existing group task and adds it to a personal task
+    func updateRemoveGroup (name: String, desc: String, group: String, updateRow: Int) {
+        
+        taskGroups.removeAtIndex(updateRow)
+        taskPersonals.append(taskPersonal(name: name, desc: desc, group: group))
+    }
+    
+    //Removes a existing personal task and adds it to a group task
+    func updateRemovePersonal (name: String, desc: String, group: String, updateRow: Int) {
+        
+        taskPersonals.removeAtIndex(updateRow)
+        taskGroups.append(taskGroup(name: name, desc: desc, group: group))
         
     }
     
@@ -47,12 +93,18 @@ class TaskManager: NSObject {
         return (newTask2)
     }
     
-    //Sets the text for the txtDesc: UITextField in the SecondViewCOntroller
+    //Sets the text for the txtDesc: UITextField in the SecondViewontroller
     func forceDesc () -> (String){
         
         return (newDesc2)
     }
 
+    //Sets the value of the customPicker: UIPicker in the SecondViewController
+    func forceGroup () -> (String) {
+        
+        return (newGroup2)
+    }
+    
     //Determines if a task has been selected or not in the TableView
     func forceClicked () -> (Int) {
         
@@ -64,4 +116,78 @@ class TaskManager: NSObject {
         
         return (selected2)
     }
+    
+    /*Determines if the text of a task Title has a single quote in it or not. If
+     the text does, then the syntax of the text is corrected to be inserted into or deleted from
+     the local database*/
+    func testTitleText(Title: String) -> (String) {
+        
+        textArray = [String]()
+        taskTxt = ""
+        x = 0
+        y = 0
+        
+        for char in Title.characters {
+            
+            textArray.append(String(char))
+            
+            if (char == "'") {
+                
+                z = (y + 1)
+                textArray.insert("'", atIndex: z)
+                z = 0
+                y = (y + 1)
+                
+            }
+            
+            y = (y + 1)
+        }
+
+        
+        for a: Int in 0 ..< y {
+            
+            taskTxt = (taskTxt + textArray[a])
+            
+        }
+        
+        return (taskTxt)
+    }
+    
+    /*Determines if the text of a task Description has a single quote in it or not. If
+     the text does, then the syntax of the text is corrected to be inserted into or deleted from
+     the local database*/
+    func testDescText(Title: String) -> (String) {
+        
+        textArray = [String]()
+        taskTxt = ""
+        x = 0
+        y = 0
+        z = 0
+        
+        for char in Title.characters {
+            
+            textArray.append(String(char))
+            
+            if (char == "'") {
+                
+                z = (y + 1)
+                textArray.insert("'", atIndex: z)
+                z = 0
+                y = (y + 1)
+                
+            }
+            
+            y = (y + 1)
+        }
+        
+        for a: Int in 0 ..< y {
+            
+            taskTxt = (taskTxt + textArray[a])
+            
+        }
+        
+        return (taskTxt)
+    }
+
+    
 }
