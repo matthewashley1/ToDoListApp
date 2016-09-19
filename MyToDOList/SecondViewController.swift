@@ -98,9 +98,9 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
 
             else {
                 
-                let oldName = taskMgr.testTitleText(taskMgr.forceTask())
-                let oldDesc = taskMgr.testDescText(taskMgr.forceDesc())
-                let oldGroup = taskMgr.forceGroup()
+                let oldName: String = taskMgr.testTitleText(taskMgr.forceTask())
+                let oldDesc: String = taskMgr.testDescText(taskMgr.forceDesc())
+                let oldGroup: String = taskMgr.forceGroup()
                 
                 let taskTitleTxt: String = taskMgr.testTitleText(txtTask.text!)
                 let taskDescTxt: String = taskMgr.testDescText(txtDesc.text!)
@@ -193,9 +193,6 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
                 
                 let taskTitleTxt: String = taskMgr.testTitleText(txtTask.text!)
                 let taskDescTxt: String = taskMgr.testDescText(txtDesc.text!)
-                
-                print(taskTitleTxt)
-                print(taskDescTxt)
                 
                 let databaseName = "Tasks.db"
                 let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
@@ -291,8 +288,6 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
         else {
             pickerValue = ""
         }
-        
-        print(pickerValue)
         
     }
     
