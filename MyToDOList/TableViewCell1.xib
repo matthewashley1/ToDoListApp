@@ -53,6 +53,7 @@
                 <outlet property="cellGroup" destination="52d-Rs-RfO" id="bif-Iy-O1e"/>
                 <outlet property="cellTitle" destination="ecb-xM-nuJ" id="xGT-jt-ThJ"/>
             </connections>
+            <point key="canvasLocation" x="215" y="374"/>
         </tableViewCell>
     </objects>
 </document>

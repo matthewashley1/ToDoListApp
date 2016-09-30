@@ -98,12 +98,11 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
 
             else {
                 
-                let oldName: String = taskMgr.testTitleText(taskMgr.forceTask())
-                let oldDesc: String = taskMgr.testDescText(taskMgr.forceDesc())
+                let oldName: String = taskMgr.testText(taskMgr.forceTask())
+                let oldDesc: String = taskMgr.testText(taskMgr.forceDesc())
                 let oldGroup: String = taskMgr.forceGroup()
-                
-                let taskTitleTxt: String = taskMgr.testTitleText(txtTask.text!)
-                let taskDescTxt: String = taskMgr.testDescText(txtDesc.text!)
+                let taskTitleTxt: String = taskMgr.testText(txtTask.text!)
+                let taskDescTxt: String = taskMgr.testText(txtDesc.text!)
                 
                 let databaseName = "Tasks.db"
                 let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
@@ -191,9 +190,9 @@ class SecondViewController: UIViewController, UITextFieldDelegate, UITabBarDeleg
             
             else {
                 
-                let taskTitleTxt: String = taskMgr.testTitleText(txtTask.text!)
-                let taskDescTxt: String = taskMgr.testDescText(txtDesc.text!)
-                
+                let taskTitleTxt: String = taskMgr.testText(txtTask.text!)
+                let taskDescTxt: String = taskMgr.testText(txtDesc.text!)
+
                 let databaseName = "Tasks.db"
                 let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
                 let docsDir = dirPaths[0] 

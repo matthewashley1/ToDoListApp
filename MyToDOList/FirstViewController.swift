@@ -141,8 +141,8 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             if (customSwitch.on == true) {
                 
-                let taskGroupTitleText = taskMgr.testTitleText(taskMgr.taskGroups[indexPath.row].name)
-                let taskGroupDescText = taskMgr.testDescText(taskMgr.taskGroups[indexPath.row].desc)
+                let taskGroupTitleText = taskMgr.testText(taskMgr.taskGroups[indexPath.row].name)
+                let taskGroupDescText = taskMgr.testText(taskMgr.taskGroups[indexPath.row].desc)
             
                 deleteFromDatabase(taskGroupTitleText, desc: taskGroupDescText, group: taskMgr.taskGroups[indexPath.row].group)
                 taskMgr.taskGroups.removeAtIndex(indexPath.row)
@@ -152,8 +152,8 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             if (customSwitch.on == false) {
                 
-                let taskPersonalTitleText = taskMgr.testTitleText(taskMgr.taskPersonals[indexPath.row].name)
-                let taskPersonalDescText = taskMgr.testDescText(taskMgr.taskPersonals[indexPath.row].desc)
+                let taskPersonalTitleText = taskMgr.testText(taskMgr.taskPersonals[indexPath.row].name)
+                let taskPersonalDescText = taskMgr.testText(taskMgr.taskPersonals[indexPath.row].desc)
                 
                 deleteFromDatabase(taskPersonalTitleText, desc: taskPersonalDescText, group: taskMgr.taskPersonals[indexPath.row].group)
                 taskMgr.taskPersonals.removeAtIndex(indexPath.row)
@@ -183,7 +183,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return tableViewRow
     }
 
-    //Create new Table in TableView
+    //Create new Cell in TableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         //Code for using custom cell in xib file -> TableViewCell1.xib

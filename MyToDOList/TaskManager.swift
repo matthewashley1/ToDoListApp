@@ -20,14 +20,13 @@ class TaskManager: NSObject {
     
     var taskGroups = [taskGroup]()
     var taskPersonals = [taskPersonal]()
+    var textArray = [String]()
+    var taskTxt: String = ""
     var newTask2: String = ""
     var newDesc2: String = ""
     var newGroup2: String = ""
     var clicked2: Int = 0
     var selected2: Int = 0
-    var textArray = [String]()
-    var taskTxt: String = ""
-    var x: Int = 0
     var y: Int = 0
     var z: Int = 0
 
@@ -117,17 +116,16 @@ class TaskManager: NSObject {
         return (selected2)
     }
     
-    /*Determines if the text of a task Title has a single quote in it or not. If
+    /*Determines if the text of a inputed String variable has a single quote in it or not. If
      the text does, then the syntax of the text is corrected to be inserted into or deleted from
      the local database*/
-    func testTitleText(Title: String) -> (String) {
+    func testText(Text: String) -> (String) {
         
         textArray = [String]()
         taskTxt = ""
-        x = 0
         y = 0
         
-        for char in Title.characters {
+        for char in Text.characters {
             
             textArray.append(String(char))
             
@@ -152,42 +150,5 @@ class TaskManager: NSObject {
         
         return (taskTxt)
     }
-    
-    /*Determines if the text of a task Description has a single quote in it or not. If
-     the text does, then the syntax of the text is corrected to be inserted into or deleted from
-     the local database*/
-    func testDescText(Title: String) -> (String) {
-        
-        textArray = [String]()
-        taskTxt = ""
-        x = 0
-        y = 0
-        z = 0
-        
-        for char in Title.characters {
-            
-            textArray.append(String(char))
-            
-            if (char == "'") {
-                
-                z = (y + 1)
-                textArray.insert("'", atIndex: z)
-                z = 0
-                y = (y + 1)
-                
-            }
-            
-            y = (y + 1)
-        }
-        
-        for a: Int in 0 ..< y {
-            
-            taskTxt = (taskTxt + textArray[a])
-            
-        }
-        
-        return (taskTxt)
-    }
-
     
 }
