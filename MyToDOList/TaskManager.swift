@@ -116,7 +116,7 @@ class TaskManager: NSObject {
         return (selected2)
     }
     
-    /*Determines if the text of a inputed String variable has a single quote in it or not. If
+    /*Determines if the text of a inputed String variable has a apostrophe in it or not. If
      the text does, then the syntax of the text is corrected to be inserted into or deleted from
      the local database*/
     func testText(Text: String) -> (String) {
